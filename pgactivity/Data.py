@@ -263,6 +263,7 @@ class Data:
         MAX(LENGTH(datname)) AS max_length
     FROM
         pg_database
+    WHERE datname <> 'rdsadmin'
         """
         cur = self.pg_conn.cursor()
         cur.execute(query,)
