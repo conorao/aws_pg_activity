@@ -163,11 +163,6 @@ class Data:
                 connection_factory = psycopg2.extras.DictConnection
                 )
         self.pg_conn.set_isolation_level(0)
-        cur = self.pg_conn.cursor()
-        cur.execute("SELECT current_setting('is_superuser')")
-        ret = cur.fetchone()
-        if ret[0] != "on":
-            raise Exception("Must be run with database superuser privileges.")
 
     def pg_is_local_access(self,):
         """
