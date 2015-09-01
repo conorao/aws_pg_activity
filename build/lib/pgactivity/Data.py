@@ -163,15 +163,15 @@ class Data:
                 connection_factory = psycopg2.extras.DictConnection
                 )
         self.pg_conn.set_isolation_level(0)
-        cur = self.pg_conn.cursor()
-        cur.execute("SELECT current_setting('is_superuser')")
-        ret = cur.fetchone()
-        if ret[0] != "on":
-            raise Exception("Must be run with database superuser privileges.")
+        # cur = self.pg_conn.cursor()
+        # cur.execute("SELECT current_setting('is_superuser')")
+        # ret = cur.fetchone()
+        # if ret[0] != "on":
+        #     raise Exception("Must be run with database superuser privileges.")
 
     def pg_is_local_access(self,):
         """
-        Verify if the user running pg_activity can acces 
+        Verify if the user running pg_activity can acces
         system informations for a postgres process.
         """
         for psproc in psutil.process_iter():
@@ -240,7 +240,7 @@ class Data:
     def pg_get_num_dev_version(self, text_version):
         """
         Get PostgreSQL short & numeric devel. or beta version
-        from a string (SELECT version()). 
+        from a string (SELECT version()).
         """
         res = re.match(
             r"^(PostgreSQL|EnterpriseDB) ([0-9]+)\.([0-9]+)(devel|beta[0-9]+|rc[0-9]+)",
@@ -268,6 +268,7 @@ class Data:
         MAX(LENGTH(datname)) AS max_length
     FROM
         pg_database
+    WHERE datname <> 'rdsadmin'
         """
         cur = self.pg_conn.cursor()
         cur.execute(query,)
@@ -499,7 +500,7 @@ class Data:
         locktype AS type,
         duration,
         query
-    FROM 
+    FROM
         (
         SELECT
             blocking.pid,
@@ -642,7 +643,7 @@ class Data:
             except psutil.AccessDenied:
                 pass
         return processes
- 
+
     def set_global_io_counters(self,
         read_bytes_delta,
         write_bytes_delta,
